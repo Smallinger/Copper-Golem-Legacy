@@ -14,7 +14,9 @@
     "client.ClientLevelMixin",
     "client.LevelRendererMixin",
     "client.LightTextureMixin",
-    "client.MinecraftDisconnectMixin"
+    "client.MinecraftDisconnectMixin",
+    "client.MappedRegistryAccessor",
+    "client.RegistrySyncManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
