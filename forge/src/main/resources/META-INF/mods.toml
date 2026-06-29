@@ -26,3 +26,15 @@ mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "sophisticatedcore"
+mandatory = false
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "sophisticatedstorage"
+mandatory = false
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
