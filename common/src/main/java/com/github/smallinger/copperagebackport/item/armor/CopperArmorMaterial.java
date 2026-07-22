@@ -47,9 +47,6 @@ public class CopperArmorMaterial {
         ResourceLocation location = ResourceLocation.withDefaultNamespace("copper");
         ResourceKey<ArmorMaterial> key = ResourceKey.create(Registries.ARMOR_MATERIAL, location);
 
-        // NeoForge/vanilla may already provide a "minecraft:copper" armor material
-        // (added natively in newer versions). If so, reuse it instead of crashing
-        // with a duplicate-key registry exception.
         if (BuiltInRegistries.ARMOR_MATERIAL.containsKey(key)) {
             Constants.LOG.info("Armor material {} already registered, reusing existing entry for {}", location, Constants.MOD_NAME);
             return BuiltInRegistries.ARMOR_MATERIAL.getHolder(key)
