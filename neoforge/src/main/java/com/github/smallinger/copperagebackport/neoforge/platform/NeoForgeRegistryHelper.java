@@ -2,9 +2,15 @@ package com.github.smallinger.copperagebackport.neoforge.platform;
 
 import com.github.smallinger.copperagebackport.Constants;
 import com.github.smallinger.copperagebackport.registry.RegistryHelper;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ArmorMaterial;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.HashMap;
@@ -51,6 +57,16 @@ public class NeoForgeRegistryHelper extends RegistryHelper {
         });
 
         return register.register(name, supplier);
+    }
+
+    @Override
+    public Holder<SoundEvent> hackilyGetEquipSoundHolder() {
+        return DeferredHolder.create(Registries.SOUND_EVENT, ResourceLocation.withDefaultNamespace("item.armor.equip_copper"));
+    }
+
+    @Override
+    public Holder<ArmorMaterial> hackilyGetArmorMaterialHolder() {
+        return DeferredHolder.create(Registries.ARMOR_MATERIAL, ResourceLocation.withDefaultNamespace("copper"));
     }
 
     @Override

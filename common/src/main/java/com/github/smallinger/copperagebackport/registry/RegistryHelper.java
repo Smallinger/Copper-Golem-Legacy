@@ -1,9 +1,12 @@
 package com.github.smallinger.copperagebackport.registry;
 
 import com.github.smallinger.copperagebackport.Constants;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ArmorMaterial;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -220,6 +223,10 @@ public abstract class RegistryHelper {
     public <T> Supplier<T> registerAuto(ResourceKey<? extends Registry<? super T>> registry, String name, Supplier<T> supplier) {
         return registerWithNamespace(registry, MINECRAFT_NAMESPACE, name, supplier);
     }
+
+    // hacky as all hell but
+    public abstract Holder<SoundEvent> hackilyGetEquipSoundHolder();
+    public abstract Holder<ArmorMaterial> hackilyGetArmorMaterialHolder();
     
     public void onRegisterComplete(Runnable callback) {
         registrationCallbacks.add(callback);

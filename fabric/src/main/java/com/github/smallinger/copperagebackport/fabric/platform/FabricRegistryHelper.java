@@ -1,12 +1,18 @@
 package com.github.smallinger.copperagebackport.fabric.platform;
 
 import com.github.smallinger.copperagebackport.Constants;
+import com.github.smallinger.copperagebackport.ModSounds;
+import com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial;
 import com.github.smallinger.copperagebackport.registry.RegistryHelper;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ArmorMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +78,16 @@ public class FabricRegistryHelper extends RegistryHelper {
         Constants.LOG.debug("Registered {} under namespace {}", name, namespace);
         
         return () -> registered;
+    }
+
+    @Override
+    public Holder<SoundEvent> hackilyGetEquipSoundHolder() {
+        return Holder.direct(ModSounds.ARMOR_EQUIP_COPPER.get());
+    }
+
+    @Override
+    public Holder<ArmorMaterial> hackilyGetArmorMaterialHolder() {
+        return BuiltInRegistries.ARMOR_MATERIAL.getHolder(ResourceLocation.withDefaultNamespace("copper")).orElseThrow();
     }
 
     @Override
