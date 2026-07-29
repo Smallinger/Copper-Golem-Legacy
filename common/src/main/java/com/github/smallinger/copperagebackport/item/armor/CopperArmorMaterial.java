@@ -2,6 +2,7 @@ package com.github.smallinger.copperagebackport.item.armor;
 
 import com.github.smallinger.copperagebackport.Constants;
 import com.github.smallinger.copperagebackport.ModSounds;
+import com.google.common.base.Suppliers;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -60,6 +61,8 @@ public class CopperArmorMaterial {
     public static void init() {
         // Force static initialization and create the armor material supplier
         Constants.LOG.info("Registering Copper Armor Material for {}", Constants.MOD_NAME);
-        COPPER = () -> createCopper();
+        // Memoize so createCopper() (which registers the armor material) runs only once,
+        // even though 5 armor pieces each call COPPER.get().
+        COPPER = Suppliers.memoize(CopperArmorMaterial::createCopper);
     }
 }
