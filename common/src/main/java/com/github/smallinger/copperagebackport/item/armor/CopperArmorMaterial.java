@@ -40,7 +40,11 @@ public class CopperArmorMaterial {
     });
     
     public static Supplier<Holder<ArmorMaterial>> COPPER;
-    
+
+    // createCopper() registers into BuiltInRegistries.ARMOR_MATERIAL, so it must run only once.
+    // ModItems calls COPPER.get() once per armor piece, so the holder is cached here.
+    private static Holder<ArmorMaterial> copperHolder;
+
     private static Holder<ArmorMaterial> createCopper() {
         ResourceLocation location = ResourceLocation.withDefaultNamespace("copper");
         List<ArmorMaterial.Layer> layers = List.of(new ArmorMaterial.Layer(location));
@@ -60,6 +64,11 @@ public class CopperArmorMaterial {
     public static void init() {
         // Force static initialization and create the armor material supplier
         Constants.LOG.info("Registering Copper Armor Material for {}", Constants.MOD_NAME);
-        COPPER = () -> createCopper();
+        COPPER = () -> {
+            if (copperHolder == null) {
+                copperHolder = createCopper();
+            }
+            return copperHolder;
+        };
     }
 }
