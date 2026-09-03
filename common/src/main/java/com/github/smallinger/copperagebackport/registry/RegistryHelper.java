@@ -1,6 +1,7 @@
 package com.github.smallinger.copperagebackport.registry;
 
 import com.github.smallinger.copperagebackport.Constants;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -207,18 +208,39 @@ public abstract class RegistryHelper {
     /**
      * Register under the mod's namespace (copperagebackport:)
      */
-    public abstract <T> Supplier<T> register(ResourceKey<? extends Registry<? super T>> registry, String name, Supplier<T> supplier);
-    
+    public <T> Supplier<T> register(ResourceKey<? extends Registry<? super T>> registry, String name, Supplier<T> supplier) {
+        return registerWithNamespace(registry, Constants.MOD_ID, name, supplier);
+    }
+
+    /**
+     * Register under the mod's namespace (copperagebackport:)
+     */
+    public <T> Holder<T> registerForHolder(ResourceKey<? extends Registry<? super T>> registry, String name, Supplier<T> supplier) {
+        return registerWithNamespaceForHolder(registry, Constants.MOD_ID, name, supplier);
+    }
+
     /**
      * Register under a specific namespace (minecraft: or copperagebackport:)
      */
     public abstract <T> Supplier<T> registerWithNamespace(ResourceKey<? extends Registry<? super T>> registry, String namespace, String name, Supplier<T> supplier);
-    
+
+    /**
+     * Register under a specific namespace (minecraft: or copperagebackport:)
+     */
+    public abstract <T> Holder<T> registerWithNamespaceForHolder(ResourceKey<? extends Registry<? super T>> registry, String namespace, String name, Supplier<T> supplier);
+
     /**
      * Register a backported entry under the minecraft: namespace.
      */
     public <T> Supplier<T> registerAuto(ResourceKey<? extends Registry<? super T>> registry, String name, Supplier<T> supplier) {
         return registerWithNamespace(registry, MINECRAFT_NAMESPACE, name, supplier);
+    }
+
+    /**
+     * Register a backported entry under the minecraft: namespace.
+     */
+    public <T> Holder<T> registerAutoForHolder(ResourceKey<? extends Registry<? super T>> registry, String name, Supplier<T> supplier) {
+        return registerWithNamespaceForHolder(registry, MINECRAFT_NAMESPACE, name, supplier);
     }
     
     public void onRegisterComplete(Runnable callback) {
@@ -260,5 +282,4 @@ public abstract class RegistryHelper {
     public static boolean isVanillaBackport(String name) {
         return VANILLA_BACKPORT_IDS.contains(name);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.github.smallinger.copperagebackport;
 
 import com.github.smallinger.copperagebackport.registry.RegistryHelper;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -63,7 +64,7 @@ public class ModSounds {
     public static Supplier<SoundEvent> SHELF_MULTI_SWAP;
     
     // Armor sounds
-    public static Supplier<SoundEvent> ARMOR_EQUIP_COPPER;
+    public static Holder<SoundEvent> ARMOR_EQUIP_COPPER;
     
     // Weather sounds (End Flash)
     public static Supplier<SoundEvent> WEATHER_END_FLASH;
@@ -127,7 +128,7 @@ public class ModSounds {
         SHELF_MULTI_SWAP = registerSound(helper, "block.shelf.multi_swap");
         
         // Register Armor sounds
-        ARMOR_EQUIP_COPPER = registerSound(helper, "item.armor.equip_copper");
+        ARMOR_EQUIP_COPPER = registerSoundforHolder(helper, "item.armor.equip_copper");
         
         // Register Weather sounds (End Flash)
         WEATHER_END_FLASH = registerSound(helper, "weather.end_flash");
@@ -138,6 +139,10 @@ public class ModSounds {
         ResourceLocation id = ResourceLocation.withDefaultNamespace(name);
         return helper.registerAuto(Registries.SOUND_EVENT, name, () -> SoundEvent.createVariableRangeEvent(id));
     }
+
+    private static Holder<SoundEvent> registerSoundforHolder(RegistryHelper helper, String name) {
+        // Register sounds under minecraft: namespace since they are vanilla backport features
+        ResourceLocation id = ResourceLocation.withDefaultNamespace(name);
+        return helper.registerAutoForHolder(Registries.SOUND_EVENT, name, () -> SoundEvent.createVariableRangeEvent(id));
+    }
 }
-
-

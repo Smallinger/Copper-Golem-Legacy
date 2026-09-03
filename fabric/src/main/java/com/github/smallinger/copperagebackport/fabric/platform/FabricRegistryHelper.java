@@ -3,10 +3,12 @@ package com.github.smallinger.copperagebackport.fabric.platform;
 import com.github.smallinger.copperagebackport.Constants;
 import com.github.smallinger.copperagebackport.registry.RegistryHelper;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +27,11 @@ public class FabricRegistryHelper extends RegistryHelper {
 
     private final List<RestorableEntry<?>> minecraftEntries = new ArrayList<>();
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> Supplier<T> register(ResourceKey<? extends Registry<? super T>> registryKey,
-                                    String name,
-                                    Supplier<T> supplier) {
-        return registerWithNamespace(registryKey, Constants.MOD_ID, name, supplier);
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> Supplier<T> registerWithNamespace(ResourceKey<? extends Registry<? super T>> registryKey,
-                                                  String namespace,
-                                                  String name,
-                                                  Supplier<T> supplier) {
+    private <T> Tuple<Holder<T>, Supplier<T>> registerWithNamespaceInternal(ResourceKey<? extends Registry<? super T>> registryKey,
+                                                                            String namespace,
+                                                                            String name,
+                                                                            Supplier<T> supplier)
+    {
         Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(registryKey.location());
         if (registry == null) {
             throw new IllegalArgumentException("Unknown registry: " + registryKey.location());
@@ -55,11 +48,12 @@ public class FabricRegistryHelper extends RegistryHelper {
             }
         }
 
-        T registered;
+        T registered = supplier.get();
+        Holder<T> holder;
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(namespace, name);
 
         try {
-            registered = net.minecraft.core.Registry.register(registry, id, supplier.get());
+            holder = net.minecraft.core.Registry.registerForHolder(registry, id, registered);
             if (MINECRAFT_NAMESPACE.equals(namespace)) {
                 cacheMinecraftEntry(registryKey, id, registered);
             }
@@ -70,8 +64,26 @@ public class FabricRegistryHelper extends RegistryHelper {
         }
 
         Constants.LOG.debug("Registered {} under namespace {}", name, namespace);
+
+        return new Tuple<>(holder, () -> registered);
+    }
+
+    @Override
+    public <T> Supplier<T> registerWithNamespace(ResourceKey<? extends Registry<? super T>> registryKey,
+                                                  String namespace,
+                                                  String name,
+                                                  Supplier<T> supplier) {
+
         
-        return () -> registered;
+        return registerWithNamespaceInternal(registryKey, namespace, name, supplier).getB();
+    }
+
+    @Override
+    public <T> Holder<T> registerWithNamespaceForHolder(ResourceKey<? extends Registry<? super T>> registryKey,
+                                                 String namespace,
+                                                 String name,
+                                                 Supplier<T> supplier) {
+        return registerWithNamespaceInternal(registryKey, namespace, name, supplier).getA();
     }
 
     @Override

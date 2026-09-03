@@ -2,13 +2,12 @@ package com.github.smallinger.copperagebackport.item.armor;
 
 import com.github.smallinger.copperagebackport.Constants;
 import com.github.smallinger.copperagebackport.ModSounds;
+import com.github.smallinger.copperagebackport.registry.RegistryHelper;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
@@ -16,7 +15,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Copper armor material with stats between Leather and Chain.
@@ -39,9 +37,9 @@ public class CopperArmorMaterial {
         map.put(ArmorItem.Type.BODY, 4);
     });
     
-    public static Supplier<Holder<ArmorMaterial>> COPPER;
+    public static Holder<ArmorMaterial> COPPER;
     
-    private static Holder<ArmorMaterial> createCopper() {
+    private static Holder<ArmorMaterial> registerMaterial() {
         ResourceLocation location = ResourceLocation.withDefaultNamespace("copper");
         List<ArmorMaterial.Layer> layers = List.of(new ArmorMaterial.Layer(location));
         
@@ -51,15 +49,25 @@ public class CopperArmorMaterial {
         }
         
         // Use our custom copper equip sound - defer the sound lookup
-        Holder<SoundEvent> equipSound = Holder.direct(ModSounds.ARMOR_EQUIP_COPPER.get());
-        
-        return Registry.registerForHolder(BuiltInRegistries.ARMOR_MATERIAL, location,
-                new ArmorMaterial(enummap, 8, equipSound, () -> Ingredient.of(Items.COPPER_INGOT), layers, 0.0F, 0.0F));
+//        Holder<SoundEvent> equipSound = SoundEvents.ARMOR_EQUIP_CHAIN;
+        Holder<SoundEvent> equipSound = ModSounds.ARMOR_EQUIP_COPPER;
+
+//        return Registry.registerForHolder(
+//                BuiltInRegistries.ARMOR_MATERIAL,
+//                location,
+//                new ArmorMaterial(enummap, 8, equipSound, () -> Ingredient.of(Items.COPPER_INGOT), layers, 0.0F, 0.0F)
+//        );
+
+        return RegistryHelper.getInstance().registerAutoForHolder(
+                Registries.ARMOR_MATERIAL,
+                "copper",
+                () -> new ArmorMaterial(enummap, 8, equipSound, () -> Ingredient.of(Items.COPPER_INGOT), layers, 0.0F, 0.0F)
+        );
     }
     
     public static void init() {
         // Force static initialization and create the armor material supplier
         Constants.LOG.info("Registering Copper Armor Material for {}", Constants.MOD_NAME);
-        COPPER = () -> createCopper();
+        COPPER = registerMaterial();
     }
 }

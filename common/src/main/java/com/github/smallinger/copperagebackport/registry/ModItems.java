@@ -405,22 +405,22 @@ public class ModItems {
         
         // Copper Armor
         COPPER_HELMET = helper.registerAuto(ITEM, "copper_helmet",
-            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER.get(), ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(11))));
+            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(11))));
         
         COPPER_CHESTPLATE = helper.registerAuto(ITEM, "copper_chestplate",
-            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER.get(), ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.CHESTPLATE.getDurability(11))));
+            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.CHESTPLATE.getDurability(11))));
         
         COPPER_LEGGINGS = helper.registerAuto(ITEM, "copper_leggings",
-            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER.get(), ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.LEGGINGS.getDurability(11))));
+            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.LEGGINGS.getDurability(11))));
         
         COPPER_BOOTS = helper.registerAuto(ITEM, "copper_boots",
-            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER.get(), ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.BOOTS.getDurability(11))));
+            () -> new ArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1).durability(ArmorItem.Type.BOOTS.getDurability(11))));
         
         // Copper Horse Armor: 4 protection (between leather 3 and iron 5)
         // 1.21.1 uses AnimalArmorItem which derives texture path from ArmorMaterial key (copperagebackport:copper)
         // -> automatically looks for: copperagebackport:textures/entity/horse/armor/horse_armor_copper.png
         // Note: 1.20.1 uses custom CopperHorseArmorItem class because HorseArmorItem only supports minecraft namespace
         COPPER_HORSE_ARMOR = helper.registerAuto(ITEM, "copper_horse_armor",
-            () -> new AnimalArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER.get(), AnimalArmorItem.BodyType.EQUESTRIAN, false, new Item.Properties().stacksTo(1)));
+            () -> new AnimalArmorItem(com.github.smallinger.copperagebackport.item.armor.CopperArmorMaterial.COPPER, AnimalArmorItem.BodyType.EQUESTRIAN, false, new Item.Properties().stacksTo(1)));
     }
 }
